@@ -83,10 +83,6 @@ async function show_popup(card) {
                     <div class="poster-img">
                         <img src="${image_path + movie.poster_path}" alt="">
                     </div>
-                    <div class="single-info">
-                        <span>Add to favorites:</span>
-                        <span class="heart-icon">&#9829;</span>
-                    </div>
                 </div>
                 <div class="right">
                     <h1>${movie.title}</h1>
@@ -122,10 +118,6 @@ async function show_popup(card) {
                     <div class="overview">
                         <h2>Overview</h2>
                         <p>${movie.overview}</p>
-                    </div>
-                    <div class="trailer">
-                        <h2>Trailer</h2>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/${movie_trailer}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
             </div>
