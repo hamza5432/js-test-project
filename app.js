@@ -2,7 +2,6 @@
 const API_KEY = `cd7a61733788ad82ca0421bd7e39430a`
 const image_path = `https://image.tmdb.org/t/p/w1280`
 
-
 const input = document.querySelector('.search input')
 const btn = document.querySelector('.search button')
 const main_grid_title = document.querySelector('.favorites h1')
@@ -12,14 +11,14 @@ const trending_el = document.querySelector('.trending .movies-grid')
 
 const popup_container = document.querySelector('.popup-container')
 
-function add_click_effect_to_card (cards) {
+function add_click_effect_to_card(cards) {
     cards.forEach(card => {
         card.addEventListener('click', () => show_popup(card))
     })
 }
 
 // SEARCH MOVIES
-async function get_movie_by_search (search_term) {
+async function get_movie_by_search(search_term) {
     const resp = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${search_term}`)
     const respData = await resp.json()
     return respData.results
@@ -27,7 +26,7 @@ async function get_movie_by_search (search_term) {
 
 btn.addEventListener('click', add_searched_movies_to_dom)
 
-async function add_searched_movies_to_dom () {
+async function add_searched_movies_to_dom() {
     const data = await get_movie_by_search(input.value)
 
     main_grid_title.innerText = `Search Results...`
@@ -57,18 +56,18 @@ async function add_searched_movies_to_dom () {
 }
 
 // POPUP
-async function get_movie_by_id (id) {
+async function get_movie_by_id(id) {
     const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`)
     const respData = await resp.json()
     return respData
 }
-async function get_movie_trailer (id) {
+async function get_movie_trailer(id) {
     const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}`)
     const respData = await resp.json()
     return respData.results[0].key
 }
 
-async function show_popup (card) {
+async function show_popup(card) {
     popup_container.classList.add('show-popup')
 
     const movie_id = card.getAttribute('data-id')
@@ -137,12 +136,12 @@ async function show_popup (card) {
     const heart_icon = popup_container.querySelector('.heart-icon')
 
     const movie_ids = get_LS()
-    for(let i = 0; i <= movie_ids.length; i++) {
+    for (let i = 0; i <= movie_ids.length; i++) {
         if (movie_ids[i] == movie_id) heart_icon.classList.add('change-color')
     }
 
     heart_icon.addEventListener('click', () => {
-        if(heart_icon.classList.contains('change-color')) {
+        if (heart_icon.classList.contains('change-color')) {
             remove_LS(movie_id)
             heart_icon.classList.remove('change-color')
         } else {
@@ -154,27 +153,27 @@ async function show_popup (card) {
 }
 
 // Local Storage
-function get_LS () {
+function get_LS() {
     const movie_ids = JSON.parse(localStorage.getItem('movie-id'))
     return movie_ids === null ? [] : movie_ids
 }
-function add_to_LS (id) {
+function add_to_LS(id) {
     const movie_ids = get_LS()
     localStorage.setItem('movie-id', JSON.stringify([...movie_ids, id]))
 }
-function remove_LS (id) {
+function remove_LS(id) {
     const movie_ids = get_LS()
     localStorage.setItem('movie-id', JSON.stringify(movie_ids.filter(e => e !== id)))
 }
 
 // Favorite Movies
 fetch_favorite_movies()
-async function fetch_favorite_movies () {
+async function fetch_favorite_movies() {
     main_grid.innerHTML = ''
 
     const movies_LS = await get_LS()
     const movies = []
-    for(let i = 0; i <= movies_LS.length - 1; i++) {
+    for (let i = 0; i <= movies_LS.length - 1; i++) {
         const movie_id = movies_LS[i]
         let movie = await get_movie_by_id(movie_id)
         add_favorites_to_dom_from_LS(movie)
@@ -182,7 +181,7 @@ async function fetch_favorite_movies () {
     }
 }
 
-function add_favorites_to_dom_from_LS (movie_data) {
+function add_favorites_to_dom_from_LS(movie_data) {
     main_grid.innerHTML += `
         <div class="card" data-id="${movie_data.id}">
             <div class="img">
@@ -208,14 +207,14 @@ function add_favorites_to_dom_from_LS (movie_data) {
 
 // Trending Movies
 get_trending_movies()
-async function get_trending_movies () {
+async function get_trending_movies() {
     const resp = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}`)
     const respData = await resp.json()
     return respData.results
 }
 
 add_to_dom_trending()
-async function add_to_dom_trending () {
+async function add_to_dom_trending() {
 
     const data = await get_trending_movies()
     console.log(data);
