@@ -1,11 +1,9 @@
-
 const API_KEY = `cd7a61733788ad82ca0421bd7e39430a`
-const image_path = `https://image.tmdb.org/t/p/w1280`
-
 const input = document.querySelector('.search input')
+const main_grid = document.querySelector('.favorites .movies-grid')
+const image_path = `https://image.tmdb.org/t/p/w1280`
 const btn = document.querySelector('.search button')
 const main_grid_title = document.querySelector('.favorites h1')
-const main_grid = document.querySelector('.favorites .movies-grid')
 
 const trending_el = document.querySelector('.trending .movies-grid')
 
