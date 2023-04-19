@@ -26,8 +26,22 @@ async function get_movie_by_search(search_term) {
 }
 btn.addEventListener('click', add_searched_movies_to_dom)
 
+async function get_movies_from_local_storage(search_term) {
+    const dataFromLocalStorage = JSON.parse(localStorage.getItem('newrespData'));
+    let data = [];
+    data = dataFromLocalStorage.filter((movie) => {
+        const movieTitle = movie.title || movie.name;
+        return movieTitle?.toLowerCase()?.includes(search_term.toLowerCase());
+    })
+    return data;
+}
+
 async function add_searched_movies_to_dom() {
-    const data = await get_movie_by_search(input.value)
+    let data = null;
+    data = await get_movies_from_local_storage(input.value);
+    if (data <= 0) {
+        data = await get_movie_by_search(input.value)
+    }
 
     main_grid_title.innerText = `Search Results...`
     main_grid.innerHTML = data.map(e => {
@@ -126,8 +140,6 @@ async function show_popup(card) {
     x_icon.addEventListener('click', () => popup_container.classList.remove('show-popup'))
 }
 
-// Trending Movies
-get_trending_movies()
 async function get_trending_movies() {
     const resp = await fetch(`https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}`)
     const respData = await resp.json()
@@ -135,10 +147,18 @@ async function get_trending_movies() {
 }
 
 add_to_dom_trending()
+
 async function add_to_dom_trending() {
 
-    const data = await get_trending_movies()
-    console.log(data);
+    let data = null;
+    const dataFromLocalStorage = JSON.parse(localStorage.getItem('newrespData'));
+
+    if (dataFromLocalStorage && dataFromLocalStorage.length > 0) {
+        data = dataFromLocalStorage;
+    } else {
+        data = await get_trending_movies();
+        localStorage.setItem("newrespData", JSON.stringify(data));
+    }
 
     trending_el.innerHTML = data.slice(0, 5).map(e => {
         return `
